@@ -18,9 +18,9 @@ public class HuskyLensCart {
     // Specific object with id 1
     public HuskyLens.Block detectedBody;
     // Speed for robot when in CV mode
-    public double LSpeed = 0.7;
+    public double LSpeed = 1.0;
     public double LRotateSpeed = 0.7;
-    public double RSpeed = -0.7;
+    public double RSpeed = -1.0;
     public double RRotateSpeed = -0.7;
     // Variables for CV logic
     public int screenWidth = 320;
@@ -28,6 +28,7 @@ public class HuskyLensCart {
     public int differenceInX = 0;
     public boolean tryDetection;
     public double focalLengthInches = 0.1417;
+    public double centerX;
 
     // Instantiates CV parts from the hardware map
     public HuskyLensCart(HardwareMap hw) {
@@ -99,7 +100,8 @@ public class HuskyLensCart {
      */
     public void followDetection(int index, Telemetry telemetry) {
         detectedBody = observedObjects[index];
-        differenceInX = (screenWidth / 2) - detectedBody.x;
+        centerX = detectedBody.x + ((double) detectedBody.width /2); //x of the huskey lens is aligned in the middle of detection box
+        differenceInX = (int) ((screenWidth / 2) - centerX);
         telemetry.addData("Distance", getDistance(38, detectedBody.height));
 
         // Checks distance of the robot to ensure that the robot doesn't crash into the object
